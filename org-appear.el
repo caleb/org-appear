@@ -171,7 +171,7 @@ nil if the cursor was not on an element.")
 
     ;; HACK: is there a better way to do this?
     (setq-local org-appear--prev-elem nil)
-    (setq org-appear-elements nil)	; reset
+    (setq org-appear-elements '(inline-src-block))	; reset
     (when (and org-hide-emphasis-markers org-appear-autoemphasis)
       (setq org-appear-elements (append org-appear-elements emphasis-elements)))
     (when (and org-pretty-entities org-appear-autosubmarkers)
@@ -329,10 +329,12 @@ Return nil if element cannot be parsed."
 	       :visible-start ,(pcase elem-tag
 				 ('emph (1+ elem-start))
 				 ('script elem-content-start)
+                 ('inline-src-block elem-content-start)
 				 ('link (or elem-content-start (+ elem-start 2))))
 	       :visible-end ,(pcase elem-tag
 			       ('emph (1- elem-end-real))
 			       ('script elem-content-end)
+				   ('inline-src-block elem-content-end)
 			       ('link (or elem-content-end (- elem-end-real 2))))))))
 
 (defun org-appear--show-invisible (elem)
